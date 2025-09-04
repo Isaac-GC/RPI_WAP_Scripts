@@ -123,7 +123,7 @@ sudo systemctl start dnsmasq
 #############################
 # Install the helper scripts
 
-SCRIPTS_DIR=$HOME/.scripts/
+SCRIPTS_DIR=$HOME/.scripts
 
 mkdir -p $SCRIPTS_DIR
 
@@ -149,6 +149,8 @@ tee $SCRIPTS_DIR/ovpn_aliases.sh << 'EOF'
 alias openvpn-connect='$HOME/.scripts/connect.sh'
 alias openvpn-disconnect='$HOME/.scripts/disconnect.sh'
 EOF
+
+chmod +x $SCRIPTS_DIR/ovpn_aliases.sh
 
 ###
 # Make sure the aliases are invoked
