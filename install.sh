@@ -180,4 +180,4 @@ else
 fi
 
 # If no $HOME/.env file... create it JIC
-if [ ! -d $HOME/.env ]; then mkdir $HOME/.env; fi
+if [ ! -f $HOME/.env ]; then touch $HOME/.env; fi
