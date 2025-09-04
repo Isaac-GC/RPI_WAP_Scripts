@@ -155,8 +155,6 @@ alias openvpn-connect='$HOME/.scripts/connect.sh'
 alias openvpn-disconnect='$HOME/.scripts/disconnect.sh'
 EOF
 
-chmod +x $SCRIPTS_DIR/ovpn_aliases.sh
-
 ###
 # Make sure the aliases are invoked
 # 
@@ -174,8 +172,8 @@ else
 fi
 
 # Check if "source script.sh" line exists and add it if not
-if ! grep -q "source script.sh" "$CONFIG_FILE"; then
-    echo "$SCRIPTS_DIR/ovpn_aliases.sh" >> "$CONFIG_FILE"
+if ! grep -q "source ovpn_aliases.sh" "$CONFIG_FILE"; then
+    echo "source $SCRIPTS_DIR/ovpn_aliases.sh" >> "$CONFIG_FILE"
     # echo "Added 'source script.sh' to $CONFIG_FILE"
 else
     echo "'source script.sh' already exists in $CONFIG_FILE"
