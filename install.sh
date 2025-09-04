@@ -135,6 +135,9 @@ echo "Connecting to: $1"
 sed -i "s/^\(VPN_COUNTRY=\).*/\1$1/" "/home/$USER/.env"
 EOF
 
+chmod +x $SCRIPTS_DIR/connect.sh
+
+
 tee $SCRIPTS_DIR/disconnect.sh << 'EOF'
 #!/bin/bash
 
@@ -142,6 +145,8 @@ source "/home/$USER/.env"
 sudo systemctl stop openvpn-client@$VPN_COUNTRY
 sed -i "s/^\(VPN_COUNTRY=\).*/\1/" "/home/$USER/.env"
 EOF
+
+chmod +x $SCRIPTS_DIR/disconnect.sh
 
 
 # Add the aliases
