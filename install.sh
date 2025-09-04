@@ -181,3 +181,7 @@ fi
 
 # If no $HOME/.env file... create it JIC
 if [ ! -f $HOME/.env ]; then touch $HOME/.env; fi
+
+# Disable openvpn and openvpn@client (not necessary for what we are doing here)
+sudo systemctl disable openvpn openvpn@client
+sudo systemctl stop openvpn openvpn@client
