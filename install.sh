@@ -178,3 +178,6 @@ if ! grep -q "source ovpn_aliases.sh" "$CONFIG_FILE"; then
 else
     echo "'source script.sh' already exists in $CONFIG_FILE"
 fi
+
+# If no $HOME/.env file... create it JIC
+if [ ! -d $HOME/.env ]; then mkdir $HOME/.env; fi
