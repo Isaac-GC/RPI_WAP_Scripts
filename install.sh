@@ -63,18 +63,7 @@ EOF
 sudo chmod +x /etc/openvpn/client/up.sh
 sudo chmod +x /etc/openvpn/client/down.sh
 
-# Unmask service (JIC)
-sudo systemctl unmask hostapd
-sudo systemctl unmask dnsmasq
-
-# Enable services
-sudo systemctl enable hostapd
-sudo systemctl enable dnsmasq
 sudo systemctl enable openvpn@client
-
-# Start services
-sudo systemctl start hostapd
-sudo systemctl start dnsmasq
 
 #############################
 # Install the helper scripts
@@ -137,7 +126,3 @@ fi
 
 # If no $HOME/.env file... create it JIC
 if [ ! -f $HOME/.env ]; then touch $HOME/.env; fi
-
-# Disable openvpn and openvpn@client (not necessary for what we are doing here)
-sudo systemctl disable openvpn openvpn@client
-sudo systemctl stop openvpn openvpn@client
