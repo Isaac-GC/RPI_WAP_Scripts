@@ -21,3 +21,15 @@ To get started:
 
 5.Then all you need to do is run `openvpn-connect <country>` (i.e. `openvpn-connect brazil`) and it should connect  
   a. To disconnect, just run the `openvpn-disconnect` command
+
+6.(Optional) Cache your credentials
+  a. Use the `sed` command to add in the path you wish to cache the creds
+    ```
+sudo sed -i 's/auth-user-pass/auth-user-pass /etc/openvpn/creds' /etc/openvpn/client/*.conf
+    ```
+
+  b. Create the password file: `sudo nano /etc/openvpn/creds` and format it with the username on the first line, password on the second
+
+  c. Next, make sure you have proper protections/permissions on the file:
+  `sudo chmod 600 /etc/openvpn/creds'
+  

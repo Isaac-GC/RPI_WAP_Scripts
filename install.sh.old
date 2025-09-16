@@ -3,11 +3,55 @@
 # Update system packages
 sudo apt update && sudo apt upgrade -y
 
-DEBIAN_FRONTEND=noninteractive sudo apt install iptables-persistent openvpn -y
+DEBIAN_FRONTEND=noninteractive sudo apt install hostapd dnsmasq iptables-persistent openvpn dhcpd -y
+
+sudo systemctl stop hostapd
+sudo systemctl stop dnsmasq
+
+# Disable wpa_supplicant as it interferes with hostapd
+sudo systemctl disable wpa_supplicant
+sudo systemctl stop wpa_supplicant
+
+# Configure static IP for wifi access point
+sudo tee -a /etc/dhcpcd.conf << EOF
+
+# Static IP configuration for wlan0
+interface wlan0
+    static ip_address=10.55.0.1/24
+    nohook wpa_supplicant
+EOF
 
 sudo raspi-config nonint do_wifi_country US
 
+# Configure hostapd 
+sudo tee /etc/hostapd/hostapd.conf << EOF
+interface=wlan0
+driver=nl80211
+ssid=Andre
+hw_mode=g
+channel=7
+wmm_enabled=0
+macaddr_acl=0
+auth_algs=1
+ignore_broadcast_ssid=0
+wpa=2
+wpa_passphrase=SomePassword1
+wpa_key_mgmt=WPA-PSK
+wpa_pairwise=TKIP
+rsn_pairwise=CCMP
+country_code=US
+EOF
 
+sudo tee -a /etc/default/hostapd << EOF
+DAEMON_CONF="/etc/hostapd/hostapd.conf"
+EOF
+
+# Configure dnsmasq (DHCP server)
+sudo mv /etc/dnsmasq.conf /etc/dnsmasq.conf.orig
+sudo tee /etc/dnsmasq.conf << EOF
+interface=wlan0
+dhcp-range=10.55.0.2,10.55.0.20,255.255.255.0,24h
+EOF
 
 # Enable IP forwarding
 echo 'net.ipv4.ip_forward=1' | sudo tee -a /etc/sysctl.conf
@@ -49,14 +93,14 @@ iptables -A FORWARD -i wlan0 -o eth0 -j DROP
 iptables -A FORWARD -i wlan0 ! -o tun0 -j DROP
 
 # Add route for access point subnet through tun0
-ip route add 10.42.0.0/24 via 10.42.0.1 dev wlan0 || true
+ip route add 10.55.0.0/24 via 10.55.0.1 dev wlan0 || true
 EOF
 
 # Create OpenVPN down script
 sudo tee /etc/openvpn/client/down.sh << 'EOF'
 #!/bin/bash
 # Remove custom routes
-ip route del 10.42.0.0/24 via 10.42.0.1 dev wlan0 2>/dev/null || true
+ip route del 10.55.0.0/24 via 10.55.0.1 dev wlan0 2>/dev/null || true
 EOF
 
 # Make scripts executable
