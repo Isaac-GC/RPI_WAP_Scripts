@@ -7,7 +7,7 @@ DEBIAN_FRONTEND=noninteractive sudo apt install iptables-persistent openvpn -y
 
 sudo raspi-config nonint do_wifi_country US
 
-
+sudo nmcli device wifi hotspot ssid Andre password SomePassword1
 
 # Enable IP forwarding
 echo 'net.ipv4.ip_forward=1' | sudo tee -a /etc/sysctl.conf
