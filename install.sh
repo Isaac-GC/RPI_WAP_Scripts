@@ -125,4 +125,4 @@ else
 fi
 
 # If no $HOME/.env file... create it JIC
-if [ ! -f $HOME/.env ]; then touch $HOME/.env; fi
+if [ ! -f $HOME/.env ]; then echo "VPN_COUNTRY=" > $HOME/.env; fi
